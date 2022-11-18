@@ -78,7 +78,22 @@ public class HeroeServiceTest {
                 .isNotNull()
                 .extracting("name")
                 .isEqualTo(heroeName);
+    }
 
+    @Test
+    public void getHeroeById_withoutMatchingHeroes_throwsHeroesNotFoundException() {
+
+        //given
+        long nonExistentUserId = 1l;
+        given(heroeRepository.findById(nonExistentUserId))
+                .willReturn(Optional.empty());
+
+        //then
+        assertThatExceptionOfType(HeroesNotFoundException.class)
+                .isThrownBy(() -> {
+                    underTest.findHeroeById(nonExistentUserId);
+                })
+                .withMessage(String.format("Heroe with id %d does not exists.",nonExistentUserId));
     }
 
 }
