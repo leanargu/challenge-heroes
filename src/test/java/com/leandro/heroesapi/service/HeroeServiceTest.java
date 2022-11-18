@@ -1,5 +1,6 @@
 package com.leandro.heroesapi.service;
 
+import com.leandro.heroesapi.exception.HeroesNotFoundException;
 import com.leandro.heroesapi.model.Heroe;
 import com.leandro.heroesapi.repository.HeroeRepository;
 import com.leandro.heroesapi.service.impl.HeroeServiceImpl;
@@ -11,6 +12,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 import static org.mockito.BDDMockito.given;
 
 public class HeroeServiceTest {
@@ -42,6 +44,20 @@ public class HeroeServiceTest {
                 .asList()
                 .isNotEmpty();
 
+    }
+
+    @Test
+    public void getAllHeroes_withoutHeroes_throwsHeroesNotFoundException() {
+        //given
+        given(heroeRepository.findAll())
+                .willReturn(List.of());
+
+        //then
+        assertThatExceptionOfType(HeroesNotFoundException.class)
+                .isThrownBy(() -> {
+                    underTest.getAllHeroes();
+                })
+                .withMessage("No heroes found.");
     }
 
 }
