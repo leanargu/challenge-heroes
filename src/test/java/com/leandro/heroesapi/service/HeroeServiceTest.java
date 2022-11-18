@@ -22,7 +22,7 @@ public class HeroeServiceTest {
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
-        underTest = new HeroeServiceImpl();
+        underTest = new HeroeServiceImpl(heroeRepository);
     }
 
     @Test
