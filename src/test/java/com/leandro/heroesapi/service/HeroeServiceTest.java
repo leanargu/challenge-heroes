@@ -158,15 +158,18 @@ public class HeroeServiceTest {
     public void updateHeroe_withValidHeroeInfoAndExistingUser_notThrowsException() {
         //given
         Long existentHeroeId = 1l;
+        Heroe heroeToSave = new Heroe("Ant Man");
+
         given(heroeRepository.findById(existentHeroeId))
-                .willReturn(Optional.of(new Heroe("Ant Man")));
+                .willReturn(Optional.of(heroeToSave));
 
         //given
         String newName = "Wakanda";
         underTest.updateHeroe(existentHeroeId,newName);
 
         //then
-        verify(heroeRepository).save(Mockito.any());
+        verify(heroeRepository).findById(existentHeroeId);
+        verify(heroeRepository).save(heroeToSave);
     }
 
 }
