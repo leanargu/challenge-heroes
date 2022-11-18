@@ -118,4 +118,18 @@ public class HeroeServiceTest {
                 .asList()
                 .isNotEmpty();
     }
+
+    @Test
+    public void getHeroesThatNameCointains_withoutMatchingHeroes_throwsHeroesNotFoundException() {
+        //given
+        given(heroeRepository.findByNameContainingIgnoreCase(Mockito.anyString()))
+                .willReturn(List.of());
+
+        //then
+        assertThatExceptionOfType(HeroesNotFoundException.class)
+                .isThrownBy(() -> {
+                    underTest.getHeroesThatNameCointains("man");
+                })
+                .withMessage("No heroes found.");
+    }
 }
