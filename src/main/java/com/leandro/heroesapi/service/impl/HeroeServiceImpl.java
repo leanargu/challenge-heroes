@@ -37,7 +37,7 @@ public class HeroeServiceImpl implements HeroeService {
 
     @Override
     public List<Heroe> getHeroesThatNameCointains(String man) {
-        return List.of(new Heroe("Iron Man"));
+        return heroeRepository.findByNameContainingIgnoreCase(man);
     }
 
 }
