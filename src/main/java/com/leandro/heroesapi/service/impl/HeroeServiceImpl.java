@@ -48,4 +48,9 @@ public class HeroeServiceImpl implements HeroeService {
         return foundHeroes;
     }
 
+    @Override
+    public void updateHeroe(Long existentHeroeId, String newName) {
+
+    }
+
 }

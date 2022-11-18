@@ -16,6 +16,7 @@ import java.util.Optional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 public class HeroeServiceTest {
 
@@ -151,6 +152,21 @@ public class HeroeServiceTest {
                     underTest.getHeroesThatNameCointains("");
                 })
                 .withMessage("Name cannot be null or empty.");
+    }
+
+    @Test
+    public void updateHeroe_withValidHeroeInfoAndExistingUser_notThrowsException() {
+        //given
+        Long existentHeroeId = 1l;
+        given(heroeRepository.findById(existentHeroeId))
+                .willReturn(Optional.of(new Heroe("Ant Man")));
+
+        //given
+        String newName = "Wakanda";
+        underTest.updateHeroe(existentHeroeId,newName);
+
+        //then
+        verify(heroeRepository).save(Mockito.any());
     }
 
 }

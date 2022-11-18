@@ -12,4 +12,6 @@ public interface HeroeRepository {
     Optional<Heroe> findById(long anyLong);
 
     List<Heroe> findByNameContainingIgnoreCase(String anyString);
+
+    void save(Heroe any);
 }
