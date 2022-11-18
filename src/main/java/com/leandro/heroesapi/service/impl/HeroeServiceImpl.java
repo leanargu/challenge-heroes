@@ -8,7 +8,10 @@ import java.util.List;
 public class HeroeServiceImpl implements HeroeService {
 
     public List<Heroe> getAllHeroes() {
-            return null;
+        return List.of(
+                new Heroe("Superman"),
+                new Heroe("Flash")
+        );
     }
 
 }
