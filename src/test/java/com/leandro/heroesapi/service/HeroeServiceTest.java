@@ -133,4 +133,14 @@ public class HeroeServiceTest {
                 .withMessage("No heroes found.");
     }
 
+    @Test
+    public void getHeroesThatNameCointains_withNullNameToFind_throwsIllegalArgumentException() {
+        //then
+        assertThatExceptionOfType(IllegalArgumentException.class)
+                .isThrownBy(() -> {
+                    underTest.getHeroesThatNameCointains(null);
+                })
+                .withMessage("Name cannot be null or empty.");
+    }
+
 }
