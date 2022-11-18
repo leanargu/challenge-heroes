@@ -36,8 +36,13 @@ public class HeroeServiceImpl implements HeroeService {
     }
 
     @Override
-    public List<Heroe> getHeroesThatNameCointains(String man) {
-        return heroeRepository.findByNameContainingIgnoreCase(man);
+    public List<Heroe> getHeroesThatNameCointains(String param) {
+        List<Heroe> foundHeroes = heroeRepository.findByNameContainingIgnoreCase(param);
+
+        if (foundHeroes.isEmpty())
+            throw new HeroesNotFoundException("No heroes found.");
+
+        return foundHeroes;
     }
 
 }
