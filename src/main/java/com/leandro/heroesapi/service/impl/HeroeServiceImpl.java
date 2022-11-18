@@ -1,5 +1,6 @@
 package com.leandro.heroesapi.service.impl;
 
+import com.leandro.heroesapi.exception.HeroesNotFoundException;
 import com.leandro.heroesapi.model.Heroe;
 import com.leandro.heroesapi.repository.HeroeRepository;
 import com.leandro.heroesapi.service.HeroeService;
@@ -15,7 +16,12 @@ public class HeroeServiceImpl implements HeroeService {
     }
 
     public List<Heroe> getAllHeroes() {
-        return heroeRepository.findAll();
+        List<Heroe> foundHeroes = heroeRepository.findAll();
+
+        if (foundHeroes.isEmpty())
+            throw new HeroesNotFoundException("No heroes found.");
+
+        return foundHeroes;
     }
 
 }
