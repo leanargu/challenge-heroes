@@ -24,4 +24,9 @@ public class HeroeServiceImpl implements HeroeService {
         return foundHeroes;
     }
 
+    @Override
+    public Heroe findHeroeById(Long l) {
+        return null;
+    }
+
 }

@@ -8,4 +8,6 @@ public interface HeroeService {
 
 
     List<Heroe> getAllHeroes();
+
+    Heroe findHeroeById(Long l);
 }

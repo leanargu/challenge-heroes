@@ -7,9 +7,11 @@ import com.leandro.heroesapi.service.impl.HeroeServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
@@ -58,6 +60,25 @@ public class HeroeServiceTest {
                     underTest.getAllHeroes();
                 })
                 .withMessage("No heroes found.");
+    }
+
+    @Test
+    public void getHeroeById_withValidIdAndHeroe_returnHeroe() {
+
+        //given
+        String heroeName = "Green Arrow";
+
+        given(heroeRepository.findById(Mockito.anyLong()))
+                .willReturn(Optional.of(new Heroe(heroeName)));
+        //when
+        Heroe result = underTest.findHeroeById(1l);
+
+        //then
+        assertThat(result)
+                .isNotNull()
+                .extracting("name")
+                .isEqualTo(heroeName);
+
     }
 
 }
