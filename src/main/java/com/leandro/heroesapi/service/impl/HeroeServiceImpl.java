@@ -25,8 +25,8 @@ public class HeroeServiceImpl implements HeroeService {
     }
 
     @Override
-    public Heroe findHeroeById(Long l) {
-        return new Heroe("Green Arrow");
+    public Heroe findHeroeById(Long id) {
+        return heroeRepository.findById(id).get();
     }
 
 }
