@@ -37,6 +37,9 @@ public class HeroeServiceImpl implements HeroeService {
 
     @Override
     public List<Heroe> getHeroesThatNameCointains(String param) {
+        if (null == param)
+            throw new IllegalArgumentException("Name cannot be null or empty.");
+
         List<Heroe> foundHeroes = heroeRepository.findByNameContainingIgnoreCase(param);
 
         if (foundHeroes.isEmpty())
