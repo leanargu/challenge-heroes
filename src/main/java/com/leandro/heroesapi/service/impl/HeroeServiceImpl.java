@@ -35,4 +35,9 @@ public class HeroeServiceImpl implements HeroeService {
                 ));
     }
 
+    @Override
+    public List<Heroe> getHeroesThatNameCointains(String man) {
+        return null;
+    }
+
 }

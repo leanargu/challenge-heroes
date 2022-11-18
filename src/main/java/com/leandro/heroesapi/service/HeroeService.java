@@ -10,4 +10,6 @@ public interface HeroeService {
     List<Heroe> getAllHeroes();
 
     Heroe findHeroeById(Long l);
+
+    List<Heroe> getHeroesThatNameCointains(String man);
 }

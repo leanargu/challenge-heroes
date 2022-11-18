@@ -10,4 +10,6 @@ public interface HeroeRepository {
     List<Heroe> findAll();
 
     Optional<Heroe> findById(long anyLong);
+
+    List<Heroe> findByNameContainingIgnoreCase(String anyString);
 }

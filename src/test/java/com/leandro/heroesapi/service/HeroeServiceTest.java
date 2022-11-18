@@ -64,7 +64,6 @@ public class HeroeServiceTest {
 
     @Test
     public void getHeroeById_withValidIdAndHeroe_returnHeroe() {
-
         //given
         String heroeName = "Green Arrow";
 
@@ -82,7 +81,6 @@ public class HeroeServiceTest {
 
     @Test
     public void getHeroeById_withoutMatchingHeroes_throwsHeroesNotFoundException() {
-
         //given
         long nonExistentUserId = 1l;
         given(heroeRepository.findById(nonExistentUserId))
@@ -104,5 +102,20 @@ public class HeroeServiceTest {
                     underTest.findHeroeById(null);
                 })
                 .withMessage("Id cannot be null.");
+    }
+
+    @Test
+    public void getHeroesThatNameCointains_withMatchingHeroes_returnHeroesList() {
+        //given
+        given(heroeRepository.findByNameContainingIgnoreCase(Mockito.anyString()))
+                .willReturn(List.of(new Heroe("Iron Man")));
+
+        //when
+        List<Heroe> result = underTest.getHeroesThatNameCointains("man");
+
+        //then
+        assertThat(result)
+                .asList()
+                .isNotEmpty();
     }
 }
