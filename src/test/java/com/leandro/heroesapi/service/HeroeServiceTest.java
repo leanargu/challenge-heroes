@@ -96,4 +96,13 @@ public class HeroeServiceTest {
                 .withMessage(String.format("Heroe with id %d does not exists.",nonExistentUserId));
     }
 
+    @Test
+    public void getHeroeById_withNullId_throwsIllegalArgumentException() {
+        //then
+        assertThatExceptionOfType(IllegalArgumentException.class)
+                .isThrownBy(() -> {
+                    underTest.findHeroeById(null);
+                })
+                .withMessage("Id cannot be null.");
+    }
 }
