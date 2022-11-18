@@ -26,7 +26,10 @@ public class HeroeServiceImpl implements HeroeService {
 
     @Override
     public Heroe findHeroeById(Long id) {
-        return heroeRepository.findById(id).get();
+        return heroeRepository.findById(id)
+                .orElseThrow(() -> new HeroesNotFoundException(
+                        String.format(String.format("Heroe with id %d does not exists.", id))
+                ));
     }
 
 }
