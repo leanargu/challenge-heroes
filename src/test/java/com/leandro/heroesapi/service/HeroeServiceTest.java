@@ -172,4 +172,20 @@ public class HeroeServiceTest {
         verify(heroeRepository).save(heroeToSave);
     }
 
+    @Test
+    public void updateHeroe_withNullHeroeNameToUpdate_throwsIllegalArgumentException() {
+        //given
+        Long nonExistentUserId = 1l;
+        given(heroeRepository.findById(nonExistentUserId))
+                .willReturn(Optional.empty());
+
+        //then
+        String newName = null;
+        assertThatExceptionOfType(IllegalArgumentException.class)
+                .isThrownBy(() -> {
+                    underTest.updateHeroe(nonExistentUserId,newName);;
+                })
+                .withMessage("Name cannot be null or empty.");
+    }
+
 }
