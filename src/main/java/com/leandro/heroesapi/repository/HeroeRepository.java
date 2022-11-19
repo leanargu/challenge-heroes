@@ -14,4 +14,6 @@ public interface HeroeRepository {
     List<Heroe> findByNameContainingIgnoreCase(String anyString);
 
     void save(Heroe any);
+
+    void deleteAll();
 }
