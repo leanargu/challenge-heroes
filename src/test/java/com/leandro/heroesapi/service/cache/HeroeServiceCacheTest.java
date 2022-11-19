@@ -172,4 +172,39 @@ public class HeroeServiceCacheTest {
         verify(heroeRepository, times(2)).findAll();
     }
 
+    @Test
+    void deleteHeroe_withCachedHeroe_invalidateCache() {
+        //given
+        Long heroeIdToDelete = 1l;
+        String heroeName = "Hulk";
+        given(heroeRepository.findById(heroeIdToDelete))
+                .willReturn(Optional.of(new Heroe(heroeName)));
+        given(heroeRepository.findAll())
+                .willReturn(List.of(new Heroe(heroeName)));
+
+        /* First call to findById method */
+        underTest.findHeroeById(heroeIdToDelete);
+        /* First call to findAll method */
+        underTest.getAllHeroes();
+
+        //when
+        /* Second call to findById method inside deleteHeroe method */
+        underTest.deleteHeroe(heroeIdToDelete);
+
+        /* Third call to findById method (because cache was invalidated on delete) */
+        underTest.findHeroeById(heroeIdToDelete);
+
+        /* Second call to findAll method (because cache was invalidated on delete) */
+        underTest.getAllHeroes();
+
+        /*Cached request*/
+        underTest.getAllHeroes();
+        underTest.getAllHeroes();
+        underTest.findHeroeById(heroeIdToDelete);
+        underTest.findHeroeById(heroeIdToDelete);
+
+        verify(heroeRepository, times(3)).findById(heroeIdToDelete);
+        verify(heroeRepository, times(2)).findAll();
+    }
+
 }
