@@ -36,6 +36,7 @@ public class HeroeServiceImpl implements HeroeService {
         return foundHeroes;
     }
 
+    @Cacheable(value = "heroe", key = "#id")
     @Override
     public Heroe findHeroeById(Long id) {
         if (id == null)
