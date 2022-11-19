@@ -50,7 +50,11 @@ public class HeroeServiceImpl implements HeroeService {
 
     @Override
     public void updateHeroe(Long existentHeroeId, String newName) {
+        Heroe heroeToModify = findHeroeById(existentHeroeId);
 
+        heroeToModify.setName(newName);
+
+        heroeRepository.save(heroeToModify);
     }
 
 }
