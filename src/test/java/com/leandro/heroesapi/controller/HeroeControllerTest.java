@@ -28,6 +28,12 @@ class HeroeControllerTest {
     private HeroeRepository heroeRepository;
 
     @Test
+    void getAllHeroes_withoutAuth_returnUnauthorized() throws Exception {
+        mockMvc.perform(get("/api/v1/heroe/all"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
     void getAllHeroes_withHeroes_returnOkWithHeroes() throws Exception {
         mockMvc.perform(get("/api/v1/heroe/all"))
                 .andExpect(status().isOk())
