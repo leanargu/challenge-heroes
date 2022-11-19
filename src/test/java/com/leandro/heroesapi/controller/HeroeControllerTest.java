@@ -60,5 +60,11 @@ class HeroeControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    @Test
+    void getHeroeById_withNullHeroeId_returnBadRequest() throws Exception {
+        Long idToFind = null;
+        mockMvc.perform(get(String.format("/api/v1/heroe/%d", idToFind)))
+                .andExpect(status().isBadRequest());
+    }
 
 }
