@@ -1,5 +1,6 @@
 package com.leandro.heroesapi.controller;
 
+import com.leandro.heroesapi.model.Heroe;
 import com.leandro.heroesapi.repository.HeroeRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -76,6 +79,22 @@ class HeroeControllerTest {
                 .andExpect(content().json(
                         "[{\"id\":2,\"name\":\"Superman\"}," +
                                 "{\"id\":3,\"name\":\"Batman\"}]"));
+    }
+
+    @Test
+    void updateHeroe_withHeroe_updateHeroe() throws Exception {
+        Long idToModify = 1l;
+        String newName = "Incredible Hulk";
+
+        mockMvc.perform(put(String.format("/api/v1/heroe/%d?name=%s",idToModify,newName)))
+                .andExpect(status().isOk());
+
+        Heroe expectedModifiedHeroe = heroeRepository.findById(idToModify).get();
+
+        assertThat(expectedModifiedHeroe)
+                .isNotNull()
+                .extracting("name")
+                .isEqualTo(newName);
     }
 
 }
