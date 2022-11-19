@@ -42,4 +42,12 @@ class HeroeControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    @Test
+    void getHeroeById_withHeroe_returnOkWithHeroes() throws Exception {
+        Long idToFind = 1l;
+
+        mockMvc.perform(get(String.format("/api/v1/heroe/%d", idToFind)))
+                .andExpect(status().isOk())
+                .andExpect(content().json("{\"id\":1,\"name\":\"Hulk\"}"));
+    }
 }
