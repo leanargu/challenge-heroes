@@ -9,9 +9,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -104,6 +105,19 @@ class HeroeControllerTest {
 
         mockMvc.perform(put(String.format("/api/v1/heroe/%d?name=%s",unexistentHeroeIdToModify,newName)))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void deleteHeroe_withHeroe_deleteHeroe() throws Exception{
+        Long idTodelete = 1l;
+
+        mockMvc.perform(delete(String.format("/api/v1/heroe/%d",idTodelete)))
+                .andExpect(status().isOk());
+
+        Optional<Heroe> result = heroeRepository.findById(idTodelete);
+
+        assertThat(result.isEmpty());
+
     }
 
 }
