@@ -96,4 +96,44 @@ public class HeroeServiceCacheTest {
         verify(heroeRepository, times(1)).findById(secondHeroeId);
     }
 
+    @Test
+    void getHeroesThatNameCointains_withTwoHeroesAndCache_returnHeroesCallingRepositoryOnlyOnce() {
+        //given
+        String firstHeroeName = "Flash";
+        String firstParameter = "sh";
+        String secondHeroeName = "Hulk";
+        String secondParameter = "lk";
+
+        given(heroeRepository.findByNameContainingIgnoreCase(firstParameter))
+                .willReturn(List.of(
+                        new Heroe(firstHeroeName)
+                ));
+        given(heroeRepository.findByNameContainingIgnoreCase(secondParameter))
+                .willReturn(List.of(
+                        new Heroe(secondHeroeName)
+                ));
+
+        //when
+        underTest.getHeroesThatNameCointains(firstParameter);
+        underTest.getHeroesThatNameCointains(firstParameter);
+        List<Heroe> resultFirstParameter = underTest.getHeroesThatNameCointains(firstParameter);
+
+        underTest.getHeroesThatNameCointains(secondParameter);
+        underTest.getHeroesThatNameCointains(secondParameter);
+        List<Heroe> resultSecondParameter = underTest.getHeroesThatNameCointains(secondParameter);
+
+
+        //then
+        assertThat(resultFirstParameter)
+                .asList()
+                .hasSize(1);
+
+        assertThat(resultSecondParameter)
+                .asList()
+                .hasSize(1);
+
+        verify(heroeRepository, times(1)).findByNameContainingIgnoreCase(firstParameter);
+        verify(heroeRepository, times(1)).findByNameContainingIgnoreCase(secondParameter);
+    }
+
 }
