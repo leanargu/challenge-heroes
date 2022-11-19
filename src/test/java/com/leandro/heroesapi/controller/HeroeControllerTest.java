@@ -34,4 +34,12 @@ class HeroeControllerTest {
                 ));
     }
 
+    @Test
+    void getAllHeroes_withoutHeroes_returnNotFound() throws Exception {
+        heroeRepository.deleteAll();
+
+        mockMvc.perform(get("/api/v1/heroe/all"))
+                .andExpect(status().isNotFound());
+    }
+
 }
