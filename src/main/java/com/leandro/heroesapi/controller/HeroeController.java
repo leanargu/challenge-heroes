@@ -3,10 +3,7 @@ package com.leandro.heroesapi.controller;
 import com.leandro.heroesapi.model.Heroe;
 import com.leandro.heroesapi.service.HeroeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,6 +17,11 @@ public class HeroeController {
     @GetMapping("/all")
     public List<Heroe> getAllHeroes() {
         return heroeService.getAllHeroes();
+    }
+
+    @GetMapping("/{id}")
+    public Heroe getHeroeById(@PathVariable Long id) {
+        return heroeService.findHeroeById(id);
     }
 
 }
