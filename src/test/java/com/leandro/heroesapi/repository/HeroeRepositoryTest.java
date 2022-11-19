@@ -32,4 +32,16 @@ public class HeroeRepositoryTest {
                 .hasSize(3);
     }
 
+    @Test
+    void findByNameContaining() {
+        //when
+        List<Heroe> result = underTest.findByNameContainingIgnoreCase("man");
+
+        //then
+        assertThat(result)
+                .asList()
+                .hasSize(2);
+
+    }
+
 }
