@@ -97,4 +97,13 @@ class HeroeControllerTest {
                 .isEqualTo(newName);
     }
 
+    @Test
+    void updateHeroe_withoutHeroe_returnNotFound() throws Exception {
+        Long unexistentHeroeIdToModify = 9l;
+        String newName = "Incredible Hulk";
+
+        mockMvc.perform(put(String.format("/api/v1/heroe/%d?name=%s",unexistentHeroeIdToModify,newName)))
+                .andExpect(status().isNotFound());
+    }
+
 }
