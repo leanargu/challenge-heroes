@@ -136,4 +136,40 @@ public class HeroeServiceCacheTest {
         verify(heroeRepository, times(1)).findByNameContainingIgnoreCase(secondParameter);
     }
 
+    @Test
+    void updateHeroe_withCachedHeroe_returnUpdatedHeroe() {
+        //given
+        Long heroeToFindId = 1l;
+        Heroe heroeToUpdate = new Heroe("Hulk");
+        given(heroeRepository.findById(heroeToFindId))
+                .willReturn(Optional.of(heroeToUpdate));
+        given(heroeRepository.findAll())
+                .willReturn(List.of(heroeToUpdate));
+
+        /* First call to findById method */
+        heroeRepository.findById(heroeToFindId);
+        /* First call to findAll method */
+        underTest.getAllHeroes();
+
+        //when
+        String newHeroeName = "Incredible Hulk";
+        /* Second call to findById method inside updateHeroe method */
+        underTest.updateHeroe(heroeToFindId, newHeroeName);
+
+        /* Third call to findById method (because cache was invalidated on update) */
+        underTest.findHeroeById(heroeToFindId);
+        /* Second call to findAll method (because cache was invalidated on update) */
+        underTest.getAllHeroes();
+
+        /*Cached request*/
+        underTest.getAllHeroes();
+        underTest.getAllHeroes();
+        underTest.findHeroeById(heroeToFindId);
+        underTest.findHeroeById(heroeToFindId);
+
+        //then
+        verify(heroeRepository, times(3)).findById(heroeToFindId);
+        verify(heroeRepository, times(2)).findAll();
+    }
+
 }
