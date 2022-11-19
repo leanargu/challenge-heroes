@@ -91,4 +91,10 @@ public class HeroeServiceImpl implements HeroeService {
         heroeRepository.delete(heroeToDelete);
     }
 
+    @Caching(evict = {
+            @CacheEvict(value = "all_heroes", allEntries = true),
+            @CacheEvict(value = "heroe", allEntries = true)
+    })
+    public void invalidateCache() {
+    }
 }

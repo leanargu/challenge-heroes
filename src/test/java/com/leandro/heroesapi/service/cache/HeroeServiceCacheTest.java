@@ -30,6 +30,11 @@ public class HeroeServiceCacheTest {
     @InjectMocks
     private HeroeServiceImpl underTest;
 
+    @AfterEach
+    void tearDown() {
+        underTest.invalidateCache();
+    }
+
     @Test
     public void getAllHeroes_withHeroesAndCache_returnAListOfHeroesCallingRepositoryOnlyOnce() {
         //given
