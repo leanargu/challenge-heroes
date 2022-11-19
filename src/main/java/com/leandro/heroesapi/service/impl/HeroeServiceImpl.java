@@ -5,7 +5,9 @@ import com.leandro.heroesapi.model.Heroe;
 import com.leandro.heroesapi.repository.HeroeRepository;
 import com.leandro.heroesapi.service.HeroeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -62,12 +64,16 @@ public class HeroeServiceImpl implements HeroeService {
         return foundHeroes;
     }
 
+    @Caching(evict = {
+            @CacheEvict(value = "all_heroes", allEntries = true),
+            @CacheEvict(value = "heroe", key = "#id")
+    })
     @Override
-    public void updateHeroe(Long existentHeroeId, String newName) {
+    public void updateHeroe(Long id, String newName) {
         if(null == newName)
             throw new IllegalArgumentException("Name cannot be null or empty.");
 
-        Heroe heroeToModify = findHeroeById(existentHeroeId);
+        Heroe heroeToModify = findHeroeById(id);
 
         heroeToModify.setName(newName);
 
