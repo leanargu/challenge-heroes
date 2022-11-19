@@ -50,6 +50,9 @@ public class HeroeServiceImpl implements HeroeService {
 
     @Override
     public void updateHeroe(Long existentHeroeId, String newName) {
+        if(null == newName)
+            throw new IllegalArgumentException("Name cannot be null or empty.");
+
         Heroe heroeToModify = findHeroeById(existentHeroeId);
 
         heroeToModify.setName(newName);
