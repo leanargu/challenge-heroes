@@ -67,4 +67,15 @@ class HeroeControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    @Test
+    void getHeroesThatNameCointains_withtHeroes_returnOkWithHeroes() throws Exception {
+        String paramContaining = "man";
+
+        mockMvc.perform(get(String.format("/api/v1/heroe/all?containing=%s", paramContaining)))
+                .andExpect(status().isOk())
+                .andExpect(content().json(
+                        "[{\"id\":2,\"name\":\"Superman\"}," +
+                                "{\"id\":3,\"name\":\"Batman\"}]"));
+    }
+
 }
