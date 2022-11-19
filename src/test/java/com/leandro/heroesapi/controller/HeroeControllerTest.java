@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +34,7 @@ class HeroeControllerTest {
                 .andExpect(status().isUnauthorized());
     }
 
+    @WithMockUser(value = "spring")
     @Test
     void getAllHeroes_withHeroes_returnOkWithHeroes() throws Exception {
         mockMvc.perform(get("/api/v1/heroe/all"))
@@ -44,6 +46,7 @@ class HeroeControllerTest {
                 ));
     }
 
+    @WithMockUser(value = "spring")
     @Test
     void getAllHeroes_withoutHeroes_returnNotFound() throws Exception {
         heroeRepository.deleteAll();
@@ -52,6 +55,7 @@ class HeroeControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    @WithMockUser(value = "spring")
     @Test
     void getHeroeById_withHeroe_returnOkWithHeroes() throws Exception {
         Long idToFind = 1l;
@@ -61,6 +65,7 @@ class HeroeControllerTest {
                 .andExpect(content().json("{\"id\":1,\"name\":\"Hulk\"}"));
     }
 
+    @WithMockUser(value = "spring")
     @Test
     void getHeroeById_withoutHeroe_returnNotFound() throws Exception {
         heroeRepository.deleteAll();
@@ -70,6 +75,7 @@ class HeroeControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    @WithMockUser(value = "spring")
     @Test
     void getHeroeById_withNullHeroeId_returnBadRequest() throws Exception {
         Long idToFind = null;
@@ -77,6 +83,7 @@ class HeroeControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    @WithMockUser(value = "spring")
     @Test
     void getHeroesThatNameCointains_withtHeroes_returnOkWithHeroes() throws Exception {
         String paramContaining = "man";
@@ -88,6 +95,7 @@ class HeroeControllerTest {
                                 "{\"id\":3,\"name\":\"Batman\"}]"));
     }
 
+    @WithMockUser(value = "spring")
     @Test
     void updateHeroe_withHeroe_updateHeroe() throws Exception {
         Long idToModify = 1l;
@@ -104,6 +112,7 @@ class HeroeControllerTest {
                 .isEqualTo(newName);
     }
 
+    @WithMockUser(value = "spring")
     @Test
     void updateHeroe_withoutHeroe_returnNotFound() throws Exception {
         Long unexistentHeroeIdToModify = 9l;
@@ -113,6 +122,7 @@ class HeroeControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    @WithMockUser(value = "spring")
     @Test
     void deleteHeroe_withHeroe_deleteHeroe() throws Exception{
         Long idTodelete = 1l;
