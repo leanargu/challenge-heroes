@@ -2,14 +2,16 @@
 
 The purpose of this api is to make the **maintenance** and management of **superheroes**.
 
-This api will let you:
-• Find all super heroes
-• Find a unique heroe by id
-• Delete a heroe
-• Modify an heroe
-And
-• Find all heroes that contains X parameter on his name
+### This api will let you:<br>
+• Find all super heroes<br>
+• Find a unique heroe by id<br>
+• Delete a heroe<br>
+• Modify an heroe<br>
+And<br>
+• Find all heroes that contains X parameter on his name<br>
 > For example: if the **X** parameter is **“man”**, the api will return **“Spiderman”**, **“Superman”**, **“Manolito el fuerte”**, etc.
+
+*Spring Data JPA with Hibernate implementation is used to mantain DDL database files. To upload initial data (for example inserting heroes) modify **data.sql** file.*
 
 ## How to run
 To run the application you must **execute the following comands** being in the **root folder** of the app
