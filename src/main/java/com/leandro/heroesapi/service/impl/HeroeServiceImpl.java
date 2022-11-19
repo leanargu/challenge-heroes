@@ -80,9 +80,13 @@ public class HeroeServiceImpl implements HeroeService {
         heroeRepository.save(heroeToModify);
     }
 
+    @Caching(evict = {
+            @CacheEvict(value = "all_heroes", allEntries = true),
+            @CacheEvict(value = "heroe", key = "#id")
+    })
     @Override
-    public void deleteHeroe(Long existentHeroeId) {
-        Heroe heroeToDelete = findHeroeById(existentHeroeId);
+    public void deleteHeroe(Long id) {
+        Heroe heroeToDelete = findHeroeById(id);
 
         heroeRepository.delete(heroeToDelete);
     }
