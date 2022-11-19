@@ -62,4 +62,9 @@ public class HeroeServiceImpl implements HeroeService {
         heroeRepository.save(heroeToModify);
     }
 
+    @Override
+    public void deleteHeroe(Long existentHeroeId) {
+
+    }
+
 }

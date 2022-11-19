@@ -188,4 +188,17 @@ public class HeroeServiceTest {
                 .withMessage("Name cannot be null or empty.");
     }
 
+    @Test
+    public void deleteHeroe_withSavedHeroe_notThrowsException() {
+        //given
+        Long existentHeroeId = 1l;
+        given(heroeRepository.findById(existentHeroeId))
+                .willReturn(Optional.of(new Heroe("Superman")));
+
+        underTest.deleteHeroe(existentHeroeId);
+
+        //then
+        verify(heroeRepository).delete(Mockito.any());
+    }
+
 }

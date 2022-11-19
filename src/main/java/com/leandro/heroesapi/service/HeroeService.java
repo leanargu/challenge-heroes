@@ -14,4 +14,6 @@ public interface HeroeService {
     List<Heroe> getHeroesThatNameCointains(String man);
 
     void updateHeroe(Long existentHeroeId, String newName);
+
+    void deleteHeroe(Long existentHeroeId);
 }
