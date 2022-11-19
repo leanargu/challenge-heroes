@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -51,6 +52,48 @@ public class HeroeServiceCacheTest {
                 .isNotEmpty();
 
         verify(heroeRepository, times(1)).findAll();
+    }
+
+    @Test
+    public void findHeroeById_withTwoHeroesAndCache_returnHeroesCallingRepositoryOnlyOnce() {
+        //given
+        String firstHeroeName = "Flash";
+        Long firstHeroeId = 1l;
+        String secondHeroeName = "Hulk";
+        Long secondHeroeId = 2l;
+
+        given(heroeRepository.findById(firstHeroeId))
+                .willReturn(Optional.of(
+                        new Heroe(firstHeroeName)
+                ));
+        given(heroeRepository.findById(secondHeroeId))
+                .willReturn(Optional.of(
+                        new Heroe(secondHeroeName)
+                ));
+
+        //when
+        underTest.findHeroeById(firstHeroeId);
+        underTest.findHeroeById(firstHeroeId);
+        Heroe resultFirstParameter = underTest.findHeroeById(firstHeroeId);
+
+        underTest.findHeroeById(secondHeroeId);
+        underTest.findHeroeById(secondHeroeId);
+        Heroe resultSecondParameter = underTest.findHeroeById(secondHeroeId);
+
+
+        //then
+        assertThat(resultFirstParameter)
+                .isNotNull()
+                .extracting("name")
+                .isEqualTo(firstHeroeName);
+
+        assertThat(resultSecondParameter)
+                .isNotNull()
+                .extracting("name")
+                .isEqualTo(secondHeroeName);
+
+        verify(heroeRepository, times(1)).findById(firstHeroeId);
+        verify(heroeRepository, times(1)).findById(secondHeroeId);
     }
 
 }
