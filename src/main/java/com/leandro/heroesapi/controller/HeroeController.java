@@ -26,4 +26,11 @@ public class HeroeController {
         return heroeService.findHeroeById(id);
     }
 
+    @PutMapping("/{id}")
+    public void updateHeroe(
+            @PathVariable Long id,
+            @RequestParam(required = false) String name) {
+        heroeService.updateHeroe(id, name);
+    }
+
 }
