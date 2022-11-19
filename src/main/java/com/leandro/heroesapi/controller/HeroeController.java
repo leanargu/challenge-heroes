@@ -15,7 +15,9 @@ public class HeroeController {
     private HeroeService heroeService;
 
     @GetMapping("/all")
-    public List<Heroe> getAllHeroes() {
+    public List<Heroe> getAllHeroes(@RequestParam(required = false) String containing) {
+        if (null != containing && !containing.isBlank())
+            return heroeService.getHeroesThatNameCointains(containing);
         return heroeService.getAllHeroes();
     }
 
