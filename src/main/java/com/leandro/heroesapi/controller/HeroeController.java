@@ -33,4 +33,9 @@ public class HeroeController {
         heroeService.updateHeroe(id, name);
     }
 
+    @DeleteMapping("/{id}")
+    public void deleteHeroe(@PathVariable Long id) {
+        heroeService.deleteHeroe(id);
+    }
+
 }
