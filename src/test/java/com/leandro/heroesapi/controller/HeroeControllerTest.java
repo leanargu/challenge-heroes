@@ -50,4 +50,15 @@ class HeroeControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\"id\":1,\"name\":\"Hulk\"}"));
     }
+
+    @Test
+    void getHeroeById_withoutHeroe_returnNotFound() throws Exception {
+        heroeRepository.deleteAll();
+        Long idToFind = 1l;
+
+        mockMvc.perform(get(String.format("/api/v1/heroe/%d", idToFind)))
+                .andExpect(status().isNotFound());
+    }
+
+
 }
