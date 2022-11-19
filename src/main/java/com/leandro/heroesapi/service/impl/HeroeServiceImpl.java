@@ -48,6 +48,7 @@ public class HeroeServiceImpl implements HeroeService {
                 ));
     }
 
+    @Cacheable(value = "heroe", key = "#param")
     @Override
     public List<Heroe> getHeroesThatNameCointains(String param) {
         if (null == param || param.isBlank())
