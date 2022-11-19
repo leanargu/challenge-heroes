@@ -198,6 +198,7 @@ public class HeroeServiceTest {
         underTest.deleteHeroe(existentHeroeId);
 
         //then
+        verify(heroeRepository).findById(existentHeroeId);
         verify(heroeRepository).delete(Mockito.any());
     }
 

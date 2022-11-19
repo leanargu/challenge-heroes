@@ -64,7 +64,9 @@ public class HeroeServiceImpl implements HeroeService {
 
     @Override
     public void deleteHeroe(Long existentHeroeId) {
+        Heroe heroeToDelete = findHeroeById(existentHeroeId);
 
+        heroeRepository.delete(heroeToDelete);
     }
 
 }
