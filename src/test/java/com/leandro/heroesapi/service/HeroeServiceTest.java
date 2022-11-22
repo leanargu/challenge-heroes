@@ -18,7 +18,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOf
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-public class HeroeServiceTest {
+class HeroeServiceTest {
 
     private HeroeService underTest;
     @Mock
@@ -31,7 +31,7 @@ public class HeroeServiceTest {
     }
 
     @Test
-    public void getAllHeroes_withHeroes_returnAListOfHeroes() {
+    void getAllHeroes_withHeroes_returnAListOfHeroes() {
         //given
         given(heroeRepository.findAll())
                 .willReturn(List.of(
@@ -40,7 +40,7 @@ public class HeroeServiceTest {
                 ));
 
         //when
-        List<Heroe> result = underTest.getAllHeroes();
+        var result = underTest.getAllHeroes();
 
         //then
         assertThat(result)
@@ -50,7 +50,7 @@ public class HeroeServiceTest {
     }
 
     @Test
-    public void getAllHeroes_withoutHeroes_throwsHeroesNotFoundException() {
+    void getAllHeroes_withoutHeroes_throwsHeroesNotFoundException() {
         //given
         given(heroeRepository.findAll())
                 .willReturn(List.of());
@@ -64,14 +64,14 @@ public class HeroeServiceTest {
     }
 
     @Test
-    public void getHeroeById_withValidIdAndHeroe_returnHeroe() {
+    void getHeroeById_withValidIdAndHeroe_returnHeroe() {
         //given
-        String heroeName = "Green Arrow";
+        var heroeName = "Green Arrow";
 
         given(heroeRepository.findById(Mockito.anyLong()))
                 .willReturn(Optional.of(new Heroe(heroeName)));
         //when
-        Heroe result = underTest.findHeroeById(1l);
+        var result = underTest.findHeroeById(1L);
 
         //then
         assertThat(result)
@@ -81,9 +81,9 @@ public class HeroeServiceTest {
     }
 
     @Test
-    public void getHeroeById_withoutMatchingHeroes_throwsHeroesNotFoundException() {
+    void getHeroeById_withoutMatchingHeroes_throwsHeroesNotFoundException() {
         //given
-        long nonExistentUserId = 1l;
+        var nonExistentUserId = 1L;
         given(heroeRepository.findById(nonExistentUserId))
                 .willReturn(Optional.empty());
 
@@ -96,7 +96,7 @@ public class HeroeServiceTest {
     }
 
     @Test
-    public void getHeroeById_withNullId_throwsIllegalArgumentException() {
+    void getHeroeById_withNullId_throwsIllegalArgumentException() {
         //then
         assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(() -> {
@@ -106,13 +106,13 @@ public class HeroeServiceTest {
     }
 
     @Test
-    public void getHeroesThatNameCointains_withMatchingHeroes_returnHeroesList() {
+    void getHeroesThatNameCointains_withMatchingHeroes_returnHeroesList() {
         //given
         given(heroeRepository.findByNameContainingIgnoreCase(Mockito.anyString()))
                 .willReturn(List.of(new Heroe("Iron Man")));
 
         //when
-        List<Heroe> result = underTest.getHeroesThatNameCointains("man");
+        var result = underTest.getHeroesThatNameCointains("man");
 
         //then
         assertThat(result)
@@ -121,7 +121,7 @@ public class HeroeServiceTest {
     }
 
     @Test
-    public void getHeroesThatNameCointains_withoutMatchingHeroes_throwsHeroesNotFoundException() {
+    void getHeroesThatNameCointains_withoutMatchingHeroes_throwsHeroesNotFoundException() {
         //given
         given(heroeRepository.findByNameContainingIgnoreCase(Mockito.anyString()))
                 .willReturn(List.of());
@@ -135,7 +135,7 @@ public class HeroeServiceTest {
     }
 
     @Test
-    public void getHeroesThatNameCointains_withNullNameToFind_throwsIllegalArgumentException() {
+    void getHeroesThatNameCointains_withNullNameToFind_throwsIllegalArgumentException() {
         //then
         assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(() -> {
@@ -145,7 +145,7 @@ public class HeroeServiceTest {
     }
 
     @Test
-    public void getHeroesThatNameCointains_withEmptyNameToFind_throwsIllegalArgumentException() {
+    void getHeroesThatNameCointains_withEmptyNameToFind_throwsIllegalArgumentException() {
         //then
         assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(() -> {
@@ -155,16 +155,16 @@ public class HeroeServiceTest {
     }
 
     @Test
-    public void updateHeroe_withValidHeroeInfoAndExistingUser_notThrowsException() {
+    void updateHeroe_withValidHeroeInfoAndExistingUser_notThrowsException() {
         //given
-        Long existentHeroeId = 1l;
-        Heroe heroeToSave = new Heroe("Ant Man");
+        var existentHeroeId = 1l;
+        var heroeToSave = new Heroe("Ant Man");
 
         given(heroeRepository.findById(existentHeroeId))
                 .willReturn(Optional.of(heroeToSave));
 
         //given
-        String newName = "Wakanda";
+        var newName = "Wakanda";
         underTest.updateHeroe(existentHeroeId,newName);
 
         //then
@@ -173,9 +173,9 @@ public class HeroeServiceTest {
     }
 
     @Test
-    public void updateHeroe_withNullHeroeNameToUpdate_throwsIllegalArgumentException() {
+    void updateHeroe_withNullHeroeNameToUpdate_throwsIllegalArgumentException() {
         //given
-        Long nonExistentUserId = 1l;
+        var nonExistentUserId = 1l;
         given(heroeRepository.findById(nonExistentUserId))
                 .willReturn(Optional.empty());
 
@@ -189,9 +189,9 @@ public class HeroeServiceTest {
     }
 
     @Test
-    public void deleteHeroe_withSavedHeroe_notThrowsException() {
+    void deleteHeroe_withSavedHeroe_notThrowsException() {
         //given
-        Long existentHeroeId = 1l;
+        var existentHeroeId = 1l;
         given(heroeRepository.findById(existentHeroeId))
                 .willReturn(Optional.of(new Heroe("Superman")));
 

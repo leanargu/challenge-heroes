@@ -2,6 +2,7 @@ package com.leandro.heroesapi.controller;
 
 import com.leandro.heroesapi.model.Heroe;
 import com.leandro.heroesapi.repository.HeroeRepository;
+import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -22,22 +23,31 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class HeroeControllerTest {
 
+    public final String API_V_1_HEROE_URL = "/api/v1/heroe";
     @Autowired
     private MockMvc mockMvc;
-
     @Autowired
     private HeroeRepository heroeRepository;
+    private StringBuilder baseUrlBuilder = new StringBuilder(API_V_1_HEROE_URL);
 
     @Test
     void getAllHeroes_withoutAuth_returnUnauthorized() throws Exception {
-        mockMvc.perform(get("/api/v1/heroe/all"))
+        var url = baseUrlBuilder
+                .append("/all")
+                .toString();
+
+        mockMvc.perform(get(url))
                 .andExpect(status().isUnauthorized());
     }
 
     @WithMockUser(value = "spring")
     @Test
     void getAllHeroes_withHeroes_returnOkWithHeroes() throws Exception {
-        mockMvc.perform(get("/api/v1/heroe/all"))
+        var url = baseUrlBuilder
+                .append("/all")
+                .toString();
+
+        mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(content().json(
                         "[{\"id\":1,\"name\":\"Hulk\"}," +
@@ -51,16 +61,23 @@ class HeroeControllerTest {
     void getAllHeroes_withoutHeroes_returnNotFound() throws Exception {
         heroeRepository.deleteAll();
 
-        mockMvc.perform(get("/api/v1/heroe/all"))
+        var url = baseUrlBuilder
+                .append("/all")
+                .toString();
+
+        mockMvc.perform(get(url))
                 .andExpect(status().isNotFound());
     }
 
     @WithMockUser(value = "spring")
     @Test
     void getHeroeById_withHeroe_returnOkWithHeroes() throws Exception {
-        Long idToFind = 1l;
+        var url = baseUrlBuilder
+                .append("/")
+                .append(1L)
+                .toString();
 
-        mockMvc.perform(get(String.format("/api/v1/heroe/%d", idToFind)))
+        mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\"id\":1,\"name\":\"Hulk\"}"));
     }
@@ -69,9 +86,12 @@ class HeroeControllerTest {
     @Test
     void getHeroeById_withoutHeroe_returnNotFound() throws Exception {
         heroeRepository.deleteAll();
-        Long idToFind = 1l;
+        var url = baseUrlBuilder
+                .append("/")
+                .append(1L)
+                .toString();
 
-        mockMvc.perform(get(String.format("/api/v1/heroe/%d", idToFind)))
+        mockMvc.perform(get(url))
                 .andExpect(status().isNotFound());
     }
 
@@ -79,16 +99,23 @@ class HeroeControllerTest {
     @Test
     void getHeroeById_withNullHeroeId_returnBadRequest() throws Exception {
         Long idToFind = null;
-        mockMvc.perform(get(String.format("/api/v1/heroe/%d", idToFind)))
+        var url = baseUrlBuilder
+                .append("/")
+                .append(idToFind).toString();
+
+        mockMvc.perform(get(url))
                 .andExpect(status().isBadRequest());
     }
 
     @WithMockUser(value = "spring")
     @Test
     void getHeroesThatNameCointains_withtHeroes_returnOkWithHeroes() throws Exception {
-        String paramContaining = "man";
+        var paramContaining = "man";
+        var url = baseUrlBuilder.append("/all?containing=")
+                .append(paramContaining)
+                .toString();
 
-        mockMvc.perform(get(String.format("/api/v1/heroe/all?containing=%s", paramContaining)))
+        mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(content().json(
                         "[{\"id\":2,\"name\":\"Superman\"}," +
@@ -98,15 +125,23 @@ class HeroeControllerTest {
     @WithMockUser(value = "spring")
     @Test
     void updateHeroe_withHeroe_updateHeroe() throws Exception {
-        Long idToModify = 1l;
-        String newName = "Incredible Hulk";
+        var idToModify = 1L;
+        var newName = "Incredible Hulk";
+        var url = baseUrlBuilder
+                .append("/")
+                .append(idToModify)
+                .append("?name=")
+                .append(newName)
+                .toString();
 
-        mockMvc.perform(put(String.format("/api/v1/heroe/%d?name=%s",idToModify,newName)))
+        mockMvc.perform(put(url))
                 .andExpect(status().isOk());
 
-        Heroe expectedModifiedHeroe = heroeRepository.findById(idToModify).get();
+        Optional<Heroe> expectedModifiedHeroe = heroeRepository.findById(idToModify);
 
         assertThat(expectedModifiedHeroe)
+                .isPresent()
+                .get()
                 .isNotNull()
                 .extracting("name")
                 .isEqualTo(newName);
@@ -115,24 +150,34 @@ class HeroeControllerTest {
     @WithMockUser(value = "spring")
     @Test
     void updateHeroe_withoutHeroe_returnNotFound() throws Exception {
-        Long unexistentHeroeIdToModify = 9l;
-        String newName = "Incredible Hulk";
+        var unexistentHeroeIdToModify = 9L;
+        var newName = "Incredible Hulk";
+        var url = baseUrlBuilder.append("/")
+                .append(unexistentHeroeIdToModify)
+                .append("?name=")
+                .append(newName)
+                .toString();
 
-        mockMvc.perform(put(String.format("/api/v1/heroe/%d?name=%s",unexistentHeroeIdToModify,newName)))
+        mockMvc.perform(put(url))
                 .andExpect(status().isNotFound());
     }
 
     @WithMockUser(value = "spring")
     @Test
-    void deleteHeroe_withHeroe_deleteHeroe() throws Exception{
-        Long idTodelete = 1l;
+    void deleteHeroe_withHeroe_deleteHeroe() throws Exception {
+        var idTodelete = 1L;
+        var url = baseUrlBuilder
+                .append("/")
+                .append(idTodelete)
+                .toString();
 
-        mockMvc.perform(delete(String.format("/api/v1/heroe/%d",idTodelete)))
+        mockMvc.perform(delete(url))
                 .andExpect(status().isOk());
 
         Optional<Heroe> result = heroeRepository.findById(idTodelete);
 
-        assertThat(result.isEmpty());
+        assertThat(result)
+                .isEmpty();
 
     }
 

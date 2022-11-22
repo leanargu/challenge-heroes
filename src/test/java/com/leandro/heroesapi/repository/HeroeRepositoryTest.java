@@ -11,7 +11,7 @@ import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @DataJpaTest
-public class HeroeRepositoryTest {
+class HeroeRepositoryTest {
 
     @Autowired
     private HeroeRepository underTest;
@@ -24,7 +24,7 @@ public class HeroeRepositoryTest {
     @Test
     void findAll() {
         //when
-        List<Heroe> result = underTest.findAll();
+        var result = underTest.findAll();
 
         //then
         assertThat(result)
@@ -35,7 +35,7 @@ public class HeroeRepositoryTest {
     @Test
     void findByNameContaining() {
         //when
-        List<Heroe> result = underTest.findByNameContainingIgnoreCase("man");
+        var result = underTest.findByNameContainingIgnoreCase("man");
 
         //then
         assertThat(result)
