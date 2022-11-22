@@ -22,7 +22,7 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
-public class HeroeServiceCacheTest {
+class HeroeServiceCacheTest {
 
     @Mock
     private HeroeRepository heroeRepository;
@@ -36,7 +36,7 @@ public class HeroeServiceCacheTest {
     }
 
     @Test
-    public void getAllHeroes_withHeroesAndCache_returnAListOfHeroesCallingRepositoryOnlyOnce() {
+    void getAllHeroes_withHeroesAndCache_returnAListOfHeroesCallingRepositoryOnlyOnce() {
         //given
         given(heroeRepository.findAll())
                 .willReturn(List.of(
@@ -49,7 +49,7 @@ public class HeroeServiceCacheTest {
         underTest.getAllHeroes();
         underTest.getAllHeroes();
         underTest.getAllHeroes();
-        List<Heroe> result = underTest.getAllHeroes();
+        var result = underTest.getAllHeroes();
 
         //then
         assertThat(result)
@@ -60,12 +60,12 @@ public class HeroeServiceCacheTest {
     }
 
     @Test
-    public void findHeroeById_withTwoHeroesAndCache_returnHeroesCallingRepositoryOnlyOnce() {
+    void findHeroeById_withTwoHeroesAndCache_returnHeroesCallingRepositoryOnlyOnce() {
         //given
-        String firstHeroeName = "Flash";
-        Long firstHeroeId = 1l;
-        String secondHeroeName = "Hulk";
-        Long secondHeroeId = 2l;
+        var firstHeroeName = "Flash";
+        var firstHeroeId = 1l;
+        var secondHeroeName = "Hulk";
+        var secondHeroeId = 2l;
 
         given(heroeRepository.findById(firstHeroeId))
                 .willReturn(Optional.of(
@@ -79,11 +79,11 @@ public class HeroeServiceCacheTest {
         //when
         underTest.findHeroeById(firstHeroeId);
         underTest.findHeroeById(firstHeroeId);
-        Heroe resultFirstParameter = underTest.findHeroeById(firstHeroeId);
+        var resultFirstParameter = underTest.findHeroeById(firstHeroeId);
 
         underTest.findHeroeById(secondHeroeId);
         underTest.findHeroeById(secondHeroeId);
-        Heroe resultSecondParameter = underTest.findHeroeById(secondHeroeId);
+        var resultSecondParameter = underTest.findHeroeById(secondHeroeId);
 
 
         //then
@@ -104,10 +104,10 @@ public class HeroeServiceCacheTest {
     @Test
     void getHeroesThatNameCointains_withTwoHeroesAndCache_returnHeroesCallingRepositoryOnlyOnce() {
         //given
-        String firstHeroeName = "Flash";
-        String firstParameter = "sh";
-        String secondHeroeName = "Hulk";
-        String secondParameter = "lk";
+        var firstHeroeName = "Flash";
+        var firstParameter = "sh";
+        var secondHeroeName = "Hulk";
+        var secondParameter = "lk";
 
         given(heroeRepository.findByNameContainingIgnoreCase(firstParameter))
                 .willReturn(List.of(
@@ -121,11 +121,11 @@ public class HeroeServiceCacheTest {
         //when
         underTest.getHeroesThatNameCointains(firstParameter);
         underTest.getHeroesThatNameCointains(firstParameter);
-        List<Heroe> resultFirstParameter = underTest.getHeroesThatNameCointains(firstParameter);
+        var resultFirstParameter = underTest.getHeroesThatNameCointains(firstParameter);
 
         underTest.getHeroesThatNameCointains(secondParameter);
         underTest.getHeroesThatNameCointains(secondParameter);
-        List<Heroe> resultSecondParameter = underTest.getHeroesThatNameCointains(secondParameter);
+        var resultSecondParameter = underTest.getHeroesThatNameCointains(secondParameter);
 
 
         //then
@@ -144,8 +144,8 @@ public class HeroeServiceCacheTest {
     @Test
     void updateHeroe_withCachedHeroe_returnUpdatedHeroe() {
         //given
-        Long heroeToFindId = 1l;
-        Heroe heroeToUpdate = new Heroe("Hulk");
+        var heroeToFindId = 1l;
+        var heroeToUpdate = new Heroe("Hulk");
         given(heroeRepository.findById(heroeToFindId))
                 .willReturn(Optional.of(heroeToUpdate));
         given(heroeRepository.findAll())
@@ -157,7 +157,7 @@ public class HeroeServiceCacheTest {
         underTest.getAllHeroes();
 
         //when
-        String newHeroeName = "Incredible Hulk";
+        var newHeroeName = "Incredible Hulk";
         /* Second call to findById method inside updateHeroe method */
         underTest.updateHeroe(heroeToFindId, newHeroeName);
 
@@ -180,8 +180,8 @@ public class HeroeServiceCacheTest {
     @Test
     void deleteHeroe_withCachedHeroe_invalidateCache() {
         //given
-        Long heroeIdToDelete = 1l;
-        String heroeName = "Hulk";
+        var heroeIdToDelete = 1l;
+        var heroeName = "Hulk";
         given(heroeRepository.findById(heroeIdToDelete))
                 .willReturn(Optional.of(new Heroe(heroeName)));
         given(heroeRepository.findAll())

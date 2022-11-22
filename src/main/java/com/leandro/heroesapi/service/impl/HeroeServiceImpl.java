@@ -30,7 +30,7 @@ public class HeroeServiceImpl implements HeroeService {
 
     @Cacheable("all_heroes")
     public List<Heroe> getAllHeroes() {
-        List<Heroe> foundHeroes = heroeRepository.findAll();
+        var foundHeroes = heroeRepository.findAll();
 
         if (foundHeroes.isEmpty())
             throw new HeroesNotFoundException("No heroes found.");
@@ -56,7 +56,7 @@ public class HeroeServiceImpl implements HeroeService {
         if (null == param || param.isBlank())
             throw new IllegalArgumentException("Name cannot be null or empty.");
 
-        List<Heroe> foundHeroes = heroeRepository.findByNameContainingIgnoreCase(param);
+        var foundHeroes = heroeRepository.findByNameContainingIgnoreCase(param);
 
         if (foundHeroes.isEmpty())
             throw new HeroesNotFoundException("No heroes found.");
@@ -73,7 +73,7 @@ public class HeroeServiceImpl implements HeroeService {
         if(null == newName)
             throw new IllegalArgumentException("Name cannot be null or empty.");
 
-        Heroe heroeToModify = findHeroeById(id);
+        var heroeToModify = findHeroeById(id);
 
         heroeToModify.setName(newName);
 
@@ -86,15 +86,19 @@ public class HeroeServiceImpl implements HeroeService {
     })
     @Override
     public void deleteHeroe(Long id) {
-        Heroe heroeToDelete = findHeroeById(id);
+        var heroeToDelete = findHeroeById(id);
 
         heroeRepository.delete(heroeToDelete);
     }
 
+
+    /*
+        This metod is used to ivalidate the
+        Sprign Framework cache
+    */
     @Caching(evict = {
             @CacheEvict(value = "all_heroes", allEntries = true),
             @CacheEvict(value = "heroe", allEntries = true)
     })
-    public void invalidateCache() {
-    }
+    public void invalidateCache() {}
 }
